@@ -3,6 +3,7 @@
 #include <neoENV.h>
 #include <neoGPS.h>
 #include <neoIMU.h> 
+#include <ArduinoJson.h>
 
 neoENV env = neoENV();
 
@@ -37,19 +38,19 @@ void loop()
   Serial.println(humi);
   Serial.print("Press : ");
   Serial.println(pres);
+
+  StaticJsonBuffer<sizeof(float) * 12> jsonBuffer;
+  JsonObject& root = jsonBuffer.createObject();
+  root["temp"] = temp;
+  root["umid"] = humi;
+  root["pres"] = pres;
+  
   
   regulateLoop(1.0);
   
   Wire.beginTransmission(4);
-  Wire.write(temp);
-  Wire.endTransmission();
-  Wire.beginTransmission(4);
-  Wire.write(humi);
-  Wire.endTransmission(); 
-  Wire.write(pres);
-  Wire.endTransmission();
-  
-
+  root.printTo(Wire);
+  Wire.endTransmission();  
 }
 
 
