@@ -1,5 +1,5 @@
 #include <Wire.h>
-#include <string.h>
+#include <String.h>
 #include <neoENV.h>
 #include <neoGPS.h>
 #include <neoIMU.h> 
@@ -39,7 +39,7 @@ void loop()
   Serial.print("Press : ");
   Serial.println(pres);
 
-  StaticJsonBuffer<sizeof(float) * 12> jsonBuffer;
+  StaticJsonBuffer<sizeof(double) * 12> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
   root["temp"] = temp;
   root["umid"] = humi;
@@ -49,7 +49,10 @@ void loop()
   regulateLoop(1.0);
   
   Wire.beginTransmission(4);
-  root.printTo(Wire);
+  root.printTo(data);
+  Serial.print("Data length: ");
+  Serial.println(data.length());
+  Wire.write(data.c_str(), data.length());
   Wire.endTransmission();  
 }
 
