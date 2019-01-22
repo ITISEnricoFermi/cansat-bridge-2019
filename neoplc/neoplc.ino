@@ -2,7 +2,7 @@
 #include <neoENV.h>
 #include <neoGPS.h>
 #include <neoIMU.h> 
-#include <stdio.h>
+#include <String.h>
 
 neoENV env = neoENV();
 
@@ -44,12 +44,12 @@ void loop()
    
 }
 
-void sendData(char type, double number)
+void sendData(char type, float number)
 {
   Wire.beginTransmission(4);
   Wire.write(type);
 
-  Wire.write(number);
+  Wire.write(String(number).c_str());
 
   Wire.write('-');
   Wire.endTransmission(); 

@@ -12,10 +12,10 @@ void setup()
     
     Wire.onReceive(receiveEvent);
       
-    if (!LoRa.begin(433E6)) {
-      Serial.println("Starting LoRa failed!");
-      while (1);
-    }
+   // if (!LoRa.begin(433E6)) {
+    //  Serial.println("Starting LoRa failed!");
+  //    while (1);
+    //}
 
     Serial.println("Setup complete!");
 }
@@ -26,8 +26,19 @@ void loop()
 
 void receiveEvent(int howMany) {
   while (1 < Wire.available()) { 
-    char c = Wire.read(); 
+    char c = Wire.read();
+    switch(c) {
+      case 't':
+        Serial.println("Ricevuta temperatura");
+        break;
+      case 'h':
+        Serial.println("Ricevuta umidita");
+        break;
+      case 'p':
+        Serial.println("Ricevuta pressione");
+        break;
+          
+    }
     Serial.print(c);
   }        
-  Serial.println();
 }
