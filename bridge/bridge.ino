@@ -6,9 +6,10 @@
 
 void setup()
 {
-    Serial.begin(9600);
+    Serial.begin(115200);
     Wire.begin(4);
     Wire.onReceive(receiveEvent);
+    while(!Serial){}
     
    if (!LoRa.begin(433E6)) {
     Serial.println("Starting LoRa failed!");
@@ -18,6 +19,7 @@ void setup()
 void loop()
 {
   delay(100);
+
   
 }
 
