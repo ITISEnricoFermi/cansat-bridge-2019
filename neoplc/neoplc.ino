@@ -1,11 +1,13 @@
 #include <Wire.h>
-#include <String.h>
 #include <neoENV.h>
 #include <neoGPS.h>
 #include <neoIMU.h> 
-#include <ArduinoJson.h>
+#include <stdio.h>
 
 neoENV env = neoENV();
+
+void regulateLoop(float dt);
+void sendData(double number);
 
 float temp;
 float humi;
@@ -16,8 +18,6 @@ void setup()
   Wire.begin(); 
   env.begin();
   Serial.begin(115200);
-  
-
 
   regulateLoop(1.0);
 
@@ -25,10 +25,7 @@ void setup()
 }
 
 void loop() 
-{
-
-  String data = "";
-    
+{ 
   temp = env.readTemperature();
   humi = env.readHumidity();
   pres = env.readPressure();
@@ -38,24 +35,25 @@ void loop()
   Serial.println(humi);
   Serial.print("Press : ");
   Serial.println(pres);
-
-  StaticJsonBuffer<sizeof(double) * 12> jsonBuffer;
-  JsonObject& root = jsonBuffer.createObject();
-  root["temp"] = temp;
-  root["umid"] = humi;
-  root["pres"] = pres;
-  
   
   regulateLoop(1.0);
-  
-  Wire.beginTransmission(4);
-  root.printTo(data);
-  Serial.print("Data length: ");
-  Serial.println(data.length());
-  Wire.write(data.c_str(), data.length());
-  Wire.endTransmission();  
+
+  sendData('t', temp);
+  sendData('h', humi);
+  sendData('p', pres);
+   
 }
 
+void sendData(char type, double number)
+{
+  Wire.beginTransmission(4);
+  Wire.write(type);
+
+  Wire.write(number);
+
+  Wire.write('-');
+  Wire.endTransmission(); 
+}
 
 void regulateLoop(float dt)
 {
