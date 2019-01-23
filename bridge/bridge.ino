@@ -27,7 +27,7 @@ void setup()
       
     if (!LoRa.begin(433E6)) {
       Serial.println("Starting LoRa failed!");
-      while (1);
+      //while (1);
     }
 
     Serial.println("Setup complete!");
@@ -42,7 +42,15 @@ void receiveEvent(int howMany) {
     char c = Wire.read();
     if (c == '\n') continue;
     if (c == 't') {
-      Serial.print("Temp: ");
+      Serial.print("Temperatura: ");
+      Serial.println(readFloat());
+    }
+    if (c == 'p') {
+      Serial.print("Pressione: ");
+      Serial.println(readFloat());
+    }
+    if (c == 'u') {
+      Serial.print("Umidita': ");
       Serial.println(readFloat());
     }
   }        
