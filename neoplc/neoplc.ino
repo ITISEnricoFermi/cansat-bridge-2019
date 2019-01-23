@@ -7,7 +7,7 @@
 neoENV env = neoENV();
 
 void regulateLoop(float dt);
-void sendData(double number);
+void sendFloat(char type, float number);
 
 float temp;
 float humi;
@@ -38,20 +38,17 @@ void loop()
   
   regulateLoop(1.0);
 
-  sendData('t', temp);
-  sendData('h', humi);
-  sendData('p', pres);
+  sendFloat('t', temp);
+  sendFloat('h', humi);
+  sendFloat('p', pres);
    
 }
 
-void sendData(char type, double number)
+void sendFloat(char type, float number)
 {
   Wire.beginTransmission(4);
   Wire.write(type);
-
-  Wire.write(number);
-
-  Wire.write('-');
+  Wire.write((byte*)&number, sizeof(float));
   Wire.endTransmission(); 
 }
 
