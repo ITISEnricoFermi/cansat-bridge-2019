@@ -1,7 +1,20 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <LoRa.h>
-//#include <ArduinoJson.h>
+
+union u_tag {
+  byte b[sizeof(float)];
+  float fval;
+} u;
+
+float readFloat() {
+  short i = 0;
+  while (Wire.available() && i < sizeof(float)) {
+    u.b[i++] = Wire.read();
+  }
+  return u.fval;
+}
+
 
 void setup()
 {
@@ -25,9 +38,12 @@ void loop()
 }
 
 void receiveEvent(int howMany) {
-  while (1 < Wire.available()) { 
-    char c = Wire.read(); 
-    Serial.print(c);
+  while (0 < Wire.available()) {
+    char c = Wire.read();
+    if (c == '\n') continue;
+    if (c == 't') {
+      Serial.print("Temp: ");
+      Serial.println(readFloat());
+    }
   }        
-  Serial.println();
 }
