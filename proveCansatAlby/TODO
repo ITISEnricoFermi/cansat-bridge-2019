@@ -1,0 +1,11 @@
+neoPLC/arduino:
+
+1)Inviare variabili double con wire per coordinate gps
+
+arduino:
+
+1)Controlli servo
+
+neoPLC:
+
+1)Passaggi principali su OLED
