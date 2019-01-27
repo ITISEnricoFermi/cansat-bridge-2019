@@ -47,6 +47,18 @@ void sendFloat(char type, float number)
   Wire.endTransmission(); 
 }
 
+#pragma region sperimentale
+
+void sendDouble(char type, double number)
+{
+  Wire.beginTransmission(4);
+  Wire.write(type);
+  Wire.write((byte*)&number, sizeof(double));
+  Wire.endTransmission(); 
+}
+
+#pragma endregion
+
 void regulateLoop(float dt)
 {
   static uint32_t prev_time = 0;

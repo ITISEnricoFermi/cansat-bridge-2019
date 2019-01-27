@@ -8,6 +8,23 @@ union u_tag {
   float fval;
 } u;
 
+#pragma region sperimentale
+union w_tag {
+  byte b[sizeof(double)];
+  double dval;
+}w;
+
+double readDouble()
+{
+   short i = 0;
+    while (Wire.available() && i < sizeof(double))
+    {
+      w.b[i++] = Wire.read();
+    }
+    return w.dval;
+}
+#pragma endregion
+
 float initialCoord[1];
 const int chipSelect = 4; //?
 
