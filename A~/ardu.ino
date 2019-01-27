@@ -23,7 +23,7 @@ float readFloat()
     return u.fval;
   }
 
-  void log(float var, int type) //type 1:temp 2:press 3:humi 4:altezza
+  void logFile(float var, int type) //type 1:temp 2:press 3:humi 4:altezza
   {
     if (dataFile)
     {
@@ -75,7 +75,7 @@ void receiveEvent(int howMany)
         LoRa.print(localTemp);
         LoRa.println();
         LoRa.endPacket();
-
+        logFile(localTemp, 1);
         ended = true;
       }
 
@@ -86,6 +86,7 @@ void receiveEvent(int howMany)
         LoRa.print(localPress);
         LoRa.println();
         LoRa.endPacket();
+        logFile(localPress, 2);
         ended = true;
       }
 
@@ -96,6 +97,7 @@ void receiveEvent(int howMany)
         LoRa.print(localHumi);
         LoRa.println();
         LoRa.endPacket();
+        logFile(localHumi, 3);
         ended = true;
       }
 
@@ -120,6 +122,7 @@ void receiveEvent(int howMany)
         LoRa.print(altezza);
         LoRa.println();
         LoRa.endPacket();
+        logFile(altezza, 4);
         ended = true;
       }
 
