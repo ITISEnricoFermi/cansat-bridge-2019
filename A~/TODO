@@ -4,8 +4,13 @@ neoPLC/arduino:
 
 arduino:
 
-1)Controlli servo
+1)Controlli servo + coordinate gps iniziali
+2)Log sd
 
 neoPLC:
 
 1)Passaggi principali su OLED
+
+
+(Shift + Option + F)Formattazione Automatica
+(Shift + Command + P)Verifica arduino
