@@ -34,9 +34,9 @@ void loop() {
   sendFloat('t', temp);
   sendFloat('h', humi);
   sendFloat('p', pres);
-  sendFloat('g1', gps.pvt.lat);
-  sendFloat('g2', gps.pvt.lon);
-  sendFloat('g3', gps.pvt.alt);
+  sendFloat('a', gps.pvt.lat);
+  sendFloat('b', gps.pvt.lon);
+  sendFloat('h', gps.pvt.height);
 }
 
 void sendFloat(char type, float number)
