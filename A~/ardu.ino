@@ -118,21 +118,21 @@ void receiveEvent(int howMany)
         ended = true;
       }
 
-      case 'g1':
+      case 'a':
       {
         //Latitudine
         //metodo per ricevere double
         //lora print
       }
 
-      case 'g2':
+      case 'b':
       {
         //Latitudine
         //metodo per ricevere double
         //lora print
       }
 
-      case 'g3':
+      case 'h':
       {
         float altezza = readFloat();
         LoRa.print("Altezza: ");
