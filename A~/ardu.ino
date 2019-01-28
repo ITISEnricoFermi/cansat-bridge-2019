@@ -85,7 +85,7 @@ void receiveEvent(int howMany)
       bool ended = false;
       switch (c)
       {
-      case 't':
+      case 'a':
       {
         float localTemp = readFloat();
         LoRa.print("Temperatura: ");
@@ -96,7 +96,19 @@ void receiveEvent(int howMany)
         ended = true;
       }
 
-      case 'p':
+      case 'b':
+      {
+        
+        float localHumi = readFloat();
+        LoRa.print("Umidita: ");
+        LoRa.print(localHumi);
+        LoRa.println();
+        LoRa.endPacket();
+        logFile(localHumi, 3);
+        ended = true;
+      }
+
+      case 'c':
       {
         float localPress = readFloat();
         LoRa.print("Pressione: ");
@@ -107,25 +119,7 @@ void receiveEvent(int howMany)
         ended = true;
       }
 
-      case 'u':
-      {
-        float localHumi = readFloat();
-        LoRa.print("Umidita: ");
-        LoRa.print(localHumi);
-        LoRa.println();
-        LoRa.endPacket();
-        logFile(localHumi, 3);
-        ended = true;
-      }
-
-      case 'a':
-      {
-        //Latitudine
-        //metodo per ricevere double
-        //lora print
-      }
-
-      case 'b':
+      case 'd':
       {
         double lat = readDouble();
         LoRa.print("Latitudine: ");
@@ -135,7 +129,17 @@ void receiveEvent(int howMany)
         ended = true;
       }
 
-      case 'h':
+      case 'e':
+      {
+        double lon = readDouble();
+        LoRa.print("Latitudine: ");
+        LoRa.print(lat);
+        LoRa.endPacket();
+        logFile(lon, ); //metodo logFile serve type
+        ended = true;
+      }
+
+      case 'f':
       {
         float altezza = readFloat();
         LoRa.print("Altezza: ");
@@ -143,6 +147,105 @@ void receiveEvent(int howMany)
         LoRa.println();
         LoRa.endPacket();
         logFile(altezza, 4);
+        ended = true;
+      }
+
+      case 'g':
+      {
+        float ax = readFloat();
+        LoRa.print("Accelerazione X: ");
+        LoRa.print(ax);
+        LoRa.println();
+        LoRa.endPacket();
+        logFile(ax, ); //metodo logFile serve type
+        ended = true;
+      }
+
+      case 'h':
+      {
+        float ay = readFloat();
+        LoRa.print("Accelerazione Y: ");
+        LoRa.print(ay);
+        LoRa.println();
+        LoRa.endPacket();
+        logFile(ay, ); //metodo logFile serve type
+        ended = true;
+      }
+
+      case 'i':
+      {
+        float az = readFloat();
+        LoRa.print("Accelerazione Z: ");
+        LoRa.print(az);
+        LoRa.println();
+        LoRa.endPacket();
+        logFile(az, ); //metodo logFile serve type
+        ended = true;
+      }
+
+      case 'l':
+      {
+        float gx = readFloat();
+        LoRa.print("Gravità X: ");
+        LoRa.print(gx);
+        LoRa.println();
+        LoRa.endPacket();
+        logFile(gx, ); //metodo logFile serve type
+        ended = true;
+      }
+
+      case 'm':
+      {
+        float gy = readFloat();
+        LoRa.print("Gravità Y: ");
+        LoRa.print(gx);
+        LoRa.println();
+        LoRa.endPacket();
+        logFile(gy, ); //metodo logFile serve type
+        ended = true;
+      }
+
+      case 'n':
+      {
+        float gz = readFloat();
+        LoRa.print("Gravità Z: ");
+        LoRa.print(gz);
+        LoRa.println();
+        LoRa.endPacket();
+        logFile(gz, ); //metodo logFile serve type
+        ended = true;
+      }
+
+      case 'o':
+      {
+        float mx = readFloat();
+        LoRa.print("Magnetismo X: ");
+        LoRa.print(mx);
+        LoRa.println();
+        LoRa.endPacket();
+        logFile(mx, ); //metodo logFile serve type
+        ended = true;
+      }
+
+      case 'p':
+      {
+        float my = readFloat();
+        LoRa.print("Magnetismo Y: ");
+        LoRa.print(my);
+        LoRa.println();
+        LoRa.endPacket();
+        logFile(my, ); //metodo logFile serve type
+        ended = true;
+      }
+
+      case 'q':
+      {
+        float mz = readFloat();
+        LoRa.print("Magnetismo Z: ");
+        LoRa.print(mz);
+        LoRa.println();
+        LoRa.endPacket();
+        logFile(mz, ); //metodo logFile serve type
         ended = true;
       }
 
