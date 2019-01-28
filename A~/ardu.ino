@@ -127,9 +127,12 @@ void receiveEvent(int howMany)
 
       case 'b':
       {
-        //Latitudine
-        //metodo per ricevere double
-        //lora print
+        double lat = readDouble();
+        LoRa.print("Latitudine: ");
+        LoRa.print(lat);
+        LoRa.endPacket();
+        logFile(lat, ); //metodo logFile serve type
+        ended = true;
       }
 
       case 'h':
@@ -150,6 +153,7 @@ void receiveEvent(int howMany)
       {
         LoRa.endPacket();
       }
+      ended = false;
     }
   }
 
