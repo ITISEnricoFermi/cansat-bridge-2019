@@ -2,6 +2,7 @@ neoPLC/arduino:
 
 1)Inviare variabili double con wire per coordinate gps
 2)SPI
+3)Aggiungi Serial.pSerial.print(); per debug
 
 arduino:
 
