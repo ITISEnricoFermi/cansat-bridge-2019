@@ -1,13 +1,19 @@
 #include <Wire.h>
+#include <neoOLED.h>
 #include <neoENV.h>
 #include <neoGPS.h>
 #include <neoIMU.h> 
 #include <stdio.h>
 #include <neoBLE.h>
 
+bool gps2;
+bool env2;
+bool imu2;
+
 neoENV env = neoENV();
 neoGPS gps = neoGPS();
 neoIMU imu = neoIMU();
+neoOLED oled = neoOLED();
 
 
 void regulateLoop(float dt);
@@ -42,14 +48,67 @@ void setup()
   gps.verbose = false;
   gps.begin(1000);
   imu.begin(4,16,250,12,20);
+  oled.begin();  
+  oled.setFont(System5x7);
+  oled.clear();
   Serial.begin(115200);
   regulateLoop(1.0);
-  Serial.print("c");
   BLE.begin();
 }
 
 void loop() 
 { 
+  oled.clear();
+  oled.clearToEOL();
+  
+  if (temp && humi && pres && alt != 0 )
+  {
+  env2 = true;
+  }
+  if (!env2)
+  {
+    oled.setRow(2);
+    oled.print("ENV nfound"); 
+  }
+  if (env2)
+  {
+    oled.setRow(2);
+    oled.print("ENV ok");
+  }
+
+
+  if (imu.ax && imu.ay && imu.az && imu.gx && imu.gy && imu.gz && imu.mx && imu.my && imu.mz != 0)
+  {
+    imu2 = true;
+  }
+  if (!imu2)
+  {
+    oled.setRow(3);
+    oled.print("IMU nfound");
+  }
+  if (imu2)
+  {
+    oled.setRow(3);
+    oled.print("IMU ok");
+  }
+
+  
+  if (gps.pvt.height && gps.pvt.lat && gps.pvt.lon != 0)
+  {
+    gps2 = true;
+  }
+  if (!gps2)
+  {
+    oled.setRow(4);
+    oled.print("GPS nfound");
+  }
+  if (gps2)
+  {
+    oled.setRow(4);
+    oled.print("GPS ok");
+  }
+
+  
   gps.poll();
   imu.pollAll();
   
@@ -96,6 +155,7 @@ void loop()
   BLE.post(gps.DXb.raw);
   BLE.post(imu.DX.raw);
   BLE.post(env.DX.raw);
+  copyToApp(); 
   
   regulateLoop(1.0);
 
@@ -144,3 +204,11 @@ void regulateLoop(float dt)
   while((micros()-prev_time)<dT) {}
   prev_time = micros();
 }
+void copyToApp()
+{
+  for (int i=0; i<24; i++){
+    oled.updateDX(i);
+    BLE.post(oled.DX.raw);
+    delay(10);
+    }
+  }
