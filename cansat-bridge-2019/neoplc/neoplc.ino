@@ -49,7 +49,7 @@ void setup()
   gps.begin(1000);
   imu.begin(4,16,250,12,20);
   oled.begin();  
-  oled.setFont(System5x7);
+  oled.setFont(font8x8);
   oled.clear();
   Serial.begin(115200);
   regulateLoop(1.0);
@@ -68,14 +68,13 @@ void loop()
   if (!env2)
   {
     oled.setRow(2);
-    oled.print("ENV nfound"); 
+    oled.println("ENV !?"); 
   }
   if (env2)
   {
     oled.setRow(2);
-    oled.print("ENV ok");
+    oled.println("ENV ok");
   }
-
 
   if (imu.ax && imu.ay && imu.az && imu.gx && imu.gy && imu.gz && imu.mx && imu.my && imu.mz != 0)
   {
@@ -84,12 +83,12 @@ void loop()
   if (!imu2)
   {
     oled.setRow(3);
-    oled.print("IMU nfound");
+    oled.println("IMU !?");
   }
   if (imu2)
   {
     oled.setRow(3);
-    oled.print("IMU ok");
+    oled.println("IMU ok");
   }
 
   
@@ -100,12 +99,12 @@ void loop()
   if (!gps2)
   {
     oled.setRow(4);
-    oled.print("GPS nfound");
+    oled.println("GPS !?");
   }
   if (gps2)
   {
     oled.setRow(4);
-    oled.print("GPS ok");
+    oled.println("GPS ok");
   }
 
   
@@ -175,8 +174,8 @@ void loop()
   sendFloat('r' , alt);
 
   
-  sendDouble('p', gps.pvt.lat);
-  sendDouble('q', gps.pvt.lon);
+  sendFloat('p', gps.pvt.lat);
+  sendFloat('q', gps.pvt.lon);
 
    
 }
