@@ -1,0 +1,18 @@
+neoPLC/arduino:
+
+1)Inviare variabili double con wire per coordinate gps
+2)SPI
+3)Aggiungi Serial.pSerial.print(); per debug
+
+arduino:
+
+1)Controlli servo + coordinate gps iniziali
+2)Log sd
+
+neoPLC:
+
+1)Passaggi principali su OLED
+
+
+(Shift + Option + F)Formattazione Automatica
+(Shift + Command + P)Verifica arduino
