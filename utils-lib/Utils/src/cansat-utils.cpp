@@ -30,16 +30,22 @@ void sendFloatAfter(char a, float number)
 
 float readFloat()
 {
-    float number = 0;
-    Wire.readBytesUntil('\0', (uint8_t *)&number, sizeof(float));
-    return number;
+    union u_tagd {
+        uint8_t b[sizeof(float)];
+        float fval;
+    } ud;
+
+    while (Wire.available())
+    {
+        Wire.readBytesUntil('\0', ud.b, sizeof(float));
+    }
+
+    return ud.fval;
 }
 
-float readFloatAfter(char terminator)
+float readFloatAfter(char initiator)
 {
-    while (!Wire.available())
-        ;
-    if (Wire.read() == terminator)
+    if ((char)Wire.read() == initiator)
     {
         return readFloat();
     }

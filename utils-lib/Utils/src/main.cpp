@@ -8,9 +8,10 @@ void setup()
   Wire.begin(4);
   while (!Serial)
     ;
-  Serial.println(readFloatAfter('t'));
 }
 
 void loop()
 {
+  Serial.println("Ricevo...");
+  Serial.println(readFloat());
 }
