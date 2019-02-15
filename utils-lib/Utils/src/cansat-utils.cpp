@@ -1,54 +1,68 @@
 #include "cansat-utils.h"
 #include <Wire.h>
+#include <LoRa.h>
 
-void beginTransmission(int address)
+void CansatUtils::beginTransmission(int address)
 {
     Wire.beginTransmission(address);
 }
 
-void endTransmission()
+void CansatUtils::endTransmission()
 {
     Wire.endTransmission();
 }
 
-void endAllTransmissions()
+void CansatUtils::endAllTransmissions()
 {
     Wire.endTransmission(true);
 }
 
-void sendFloat(float number)
+void CansatUtils::sendFloat(float number)
 {
     Wire.write((uint8_t *)&number, sizeof(float));
     Wire.write('\0');
 }
 
-void sendFloatAfter(char a, float number)
+void CansatUtils::sendFloatAfter(char a, float number)
 {
     Wire.write(a);
     sendFloat(number);
 }
 
-float readFloat()
+float CansatUtils::readFloat()
 {
-    union u_tagd {
+    union u_tag {
         uint8_t b[sizeof(float)];
         float fval;
-    } ud;
+    } u;
 
-    while (Wire.available())
+    short i = 0;
+    while (Wire.available() && i < sizeof(float))
     {
-        Wire.readBytesUntil('\0', ud.b, sizeof(float));
+        u.b[i++] = Wire.read();
     }
-
-    return ud.fval;
+    return u.fval;
 }
 
-float readFloatAfter(char initiator)
+float CansatUtils::readFloatAfter(char initiator)
 {
     if ((char)Wire.read() == initiator)
     {
-        return readFloat();
+        lastFloat = readFloat();
     }
+    return lastFloat;
+}
 
-    return -1;
+void CansatUtils::printFloat(float var, int decimali)
+{
+    char out[50];
+    dtostrf(var, 2, decimali, out);
+    Serial.print(out);
+}
+
+void CansatUtils::loraFloat(float var, int decimali)
+{
+    char out[50];
+    dtostrf(var, 2, decimali, out);
+    LoRa.print(out);
 }
