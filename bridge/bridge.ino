@@ -1,10 +1,7 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <LoRa.h>
-#include <stdio.h>
-#include <stdarg.h>
-//#include <cmath.h>
-//funziona
+
 float temp;
 float pres;
 float umi;
@@ -20,35 +17,25 @@ float gy;
 float gz;
 float mx;
 float my;
-float mz;
+float mz; 
 
-float n = 10000;
-
-void printFloat(float var, int decimali){
+void printFloat(float var,int decimali) {
   char out[50];
-  char out2[50];
-  //var/=pow(10,decimali);
-  dtostrf(var,4,decimali,out);
-  sprintf(out2,"%s",out);
-  Serial.println(out2);
+  dtostrf(var,2,decimali,out);
+  Serial.print(out);
 }
 
-#define SLAVE_PIN 3
-const int chipSelect = 4;
-
-SPISettings settings(2000000, MSBFIRST, SPI_MODE0); 
+void loraFloat(float var,int decimali) {
+  char out[50];
+  dtostrf(var,2,decimali,out);
+  LoRa.print(out);
+}
     
 union u_tag 
 {
   byte b[sizeof(float)];
   float fval;
 } u;
-
-union u_tagd
-{
-  byte b[sizeof(double)];
-  double fval;
-} ud;
 
 float readFloat()
 {
@@ -59,13 +46,19 @@ float readFloat()
   return u.fval;
 }
 
+union w_tag {
+  byte b[sizeof(double)];
+  double dval;
+}w;
+
 double readDouble()
 {
-  short i = 0;
-  while (Wire.available() && i < sizeof(double)) {
-    ud.b[i++] = Wire.read();
-  }
-  return ud.fval;
+   short i = 0;
+    while (Wire.available() && i < sizeof(double))
+    {
+      w.b[i++] = Wire.read();
+    }
+    return w.dval;
 }
 
 void setup()
@@ -73,14 +66,13 @@ void setup()
     Serial.begin(115200);
 
     Wire.begin(4);
-    pinMode(chipSelect, OUTPUT);
     Wire.onReceive(receiveEvent);
       
     if (!LoRa.begin(433E6)) {
       Serial.println("Starting LoRa failed!");
     // while (1);
     }
-  
+    
 }
 void loop()
 {
@@ -92,6 +84,7 @@ void receiveEvent(int howMany) {
     
     char c = Wire.read();
     if (c == '\n') continue;
+
     if (c == 'a') {
       Serial.print("Temperatura: ");
       temp = readFloat();
@@ -116,12 +109,14 @@ void receiveEvent(int howMany) {
     if (c == 'p'){
       Serial.print("Latitudine: ");
       lat = readFloat();
-      Serial.println(lat);
+      printFloat(lat,7);
+      Serial.println();
      }
     if ( c == 'q'){
       Serial.print("Longitudine: ");
-      lon =  readFloat()/10000000;
-      Serial.println(lon);
+      lon = readFloat();
+      printFloat(lon,7);
+      Serial.println();
      }
    if ( c == 'e'){
       Serial.print("Acc. x: ");
@@ -174,24 +169,6 @@ void receiveEvent(int howMany) {
       altt = readFloat();
       Serial.println(altt);
      }
-     if ( c == 'k')
-     {
-        Serial.print("LON : ");
-        lon = readFloat();
-        Serial.println("lon float %d.%d");
-       // (int)(lon*100)%100);
-     }
-     if ( c == 'x' ) {
-      Serial.print("Var : ");
-      int var = readFloat();
-      int diff = 10000000 - var;
-      //printFloat(var,7);
-      Serial.print(var);
-      Serial.println();
-      Serial.print("Differenza : ");
-      Serial.print(diff);
-     }
-
   }
 
   
@@ -205,13 +182,33 @@ void receiveEvent(int howMany) {
  LoRa.print("Umi: ");
  LoRa.print(umi);
  LoRa.print("Latitudine: ");
- LoRa.print(lat);
+ loraFloat(lat,7);
  LoRa.print("  ");
  LoRa.print("Longitudine: ");
- LoRa.print(lon);
+ loraFloat(lon,7);
  LoRa.print("  ");
  LoRa.print("Altezza: ");
  LoRa.print(alt);
+ LoRa.print("Acc. x: ");
+ LoRa.print(ax);
+ LoRa.print("Acc. y: ");
+ LoRa.print(ay);
+ LoRa.print("Acc. z: ");
+ LoRa.print(az);
+ LoRa.print("Grav. x: ");
+ LoRa.print(gx);
+ LoRa.print("Grav. y: ");
+ LoRa.print(gy);
+ LoRa.print("Grav. z: ");
+ LoRa.print(gz);
+ LoRa.print("Magn. x: ");
+ LoRa.print(mx);
+ LoRa.print("Magn. y: ");
+ LoRa.print(my);
+ LoRa.print("Magn. z: ");
+ LoRa.print(mz);
+ LoRa.print("AltezzaENV: ");
+ LoRa.print(altt);
  LoRa.endPacket();
 
 }
