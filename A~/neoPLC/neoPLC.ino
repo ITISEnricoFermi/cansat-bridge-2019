@@ -93,7 +93,7 @@ void sendDouble(char type, double number)
 {
   Wire.beginTransmission(4);
   Wire.write(type);
-  Wire.write((byte *)&number, sizeof(double));
+  Wire.write((byte *)&number, sizeof(double)); //,8?
   Wire.endTransmission();
 }
 
