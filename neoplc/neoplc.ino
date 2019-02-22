@@ -10,16 +10,10 @@ bool gps2;
 bool env2;
 bool imu2;
 
-int arra[10];
-
 neoENV env = neoENV();
 neoGPS gps = neoGPS();
 neoIMU imu = neoIMU();
 neoOLED oled = neoOLED();
-
-double  lon = 36.9876;
-float n = 10000;
-float lon1;
 
 
 void regulateLoop(float dt);
@@ -27,6 +21,8 @@ void regulateLoop(float dt);
 void sendFloat(char type, float number);
 
 void sendDouble(char type, double number);
+
+
 
 float temp;
 float humi;
@@ -64,7 +60,7 @@ void loop()
 { 
   oled.clear();
   oled.clearToEOL();
-    
+  
   if (temp && humi && pres && alt != 0 )
   {
   env2 = true;
@@ -129,9 +125,9 @@ void loop()
   Serial.print("Altezza : ");
   Serial.println(gps.pvt.height);
   Serial.print("Latitudine : ");
-  Serial.printf(" %2.8f \n",gps.pvt.lat);
+  Serial.println(gps.pvt.lat);
   Serial.print("Longitudine : ");
-  Serial.printf(" %2.8f \n", gps.pvt.lon);
+  Serial.println(gps.pvt.lon);
   Serial.print("ax = ");  
   Serial.print(imu.ax,4);  
   Serial.print("\tay = ");
@@ -153,9 +149,6 @@ void loop()
   Serial.print("\tmz = ");
   Serial.print(imu.mz,4);
   Serial.println(" mG\n");
-
-  lon1 = (float) lon;
-  lon1 = lon1*n;
   
   BLE.post(gps.DXa.raw); 
   BLE.post(gps.DXb.raw);
@@ -173,49 +166,32 @@ void loop()
   sendFloat('f' , imu.ay);
   sendFloat('g' , imu.az);
   sendFloat('h' , imu.gx);
-  sendFloat('i' , imu.gy);  
+  sendFloat('i' , imu.gy);
   sendFloat('l' , imu.gz); 
   sendFloat('m' , imu.mx);
   sendFloat('n' , imu.my);     
   sendFloat('o' , imu.mz);  
   sendFloat('r' , alt);
-  sendFloat('k' , lon);
-  sendInt('x',10000000); //prova
+  sendFloat('p', gps.pvt.lat);
+  sendFloat('q', gps.pvt.lon);
+
+   
 }
+
 void sendFloat(char type, float number)
 {
-  sendShit(type);
-  Serial.print("Invio ");
-  Serial.println(number);
+  Wire.beginTransmission(4);
+  Wire.write(type);
   Wire.write((byte*)&number, sizeof(float));
-  doneSending();
-}
-
-void sendInt(char type, float number)
-{
-  sendShit(type);
-  Serial.print("Invio ");
-  Serial.println(number);
-  Wire.write((byte*)&number, sizeof(int));
-  doneSending();
-}
-
-void sendShit(char type) 
-{
-    Wire.beginTransmission(4);
-    Wire.write(type);
-}
-
-void doneSending() 
-{
-    Wire.endTransmission();
+  Wire.endTransmission(); 
 }
 
 void sendDouble(char type, double number)
 {
-  sendShit(type);
+  Wire.beginTransmission(4);
+  Wire.write(type);
   Wire.write((byte*)&number, sizeof(double));
-  doneSending();
+  Wire.endTransmission(); 
 }
 
 void regulateLoop(float dt)
